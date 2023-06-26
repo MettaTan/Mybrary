@@ -10,6 +10,7 @@ router.get('/', async (req, res) => {
     }
     try {
         const authors = await Author.find(searchOptions)
+
         res.render('authors/index', 
         { authors: authors, 
         searchOptions: req.query
@@ -27,25 +28,21 @@ router.get('/new', (req,res) => {
 })
 
 // Create author route
-router.post('/', (req,res) => {
-    async function createAuthor(){
-
-        const author = new Author({
-            name: req.body.name
-        })
-    
-        try {
-            const newAuthor = await author.save()
-            res.redirect('authors')
-        } catch (err) {
-            res.render('authors/new', {
-                author: author,
-                errorMessage: 'Error creating author'
-            })
-        }
+router.post('/', async (req, res) => {
+    const author = new Author({
+      name: req.body.name
+    })
+    try {
+      const newAuthor = await author.save()
+      // res.redirect(`authors/${newAuthor.id}`)
+      res.redirect(`authors`)
+    } catch {
+      res.render('authors/new', {
+        author: author,
+        errorMessage: 'Error creating Author'
+      })
     }
-    createAuthor()
-})
+  })
 
 
 
